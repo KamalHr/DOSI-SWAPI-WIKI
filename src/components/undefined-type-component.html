@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bootstrap-implementation.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="undefined-type-component">
+    <template>
+        <style include="bootstrap-implementation">
+            :host {
+                display: block;
+                --app-primary-color: #390546;
+                padding: 10px;
+            }
+            a,
+            a:visited,
+            a:hover,
+            a:active {
+                color: white;
+                background-color: var(--app-primary-color);
+            }
+        </style>
+        <a href="/{{type}}/{{getId()}}" class="list-group-item list-group-item-action">
+            {{object.name}}{{object.title}}
+        </a>
+    </template>
+    <script>
+        class Undefined extends Polymer.Element {
+            static get is() { return 'undefined-type-component'; }
+
+            static get properties() {
+                return {
+                    url: Object,
+                    object: Object,
+                    type: String
+                };
+            }
+            connectedCallback() {
+                super.connectedCallback();
+                fetch(this.url)
+                .then(res => res.json().then(data => this.object = data));
+            }
+            getId() {
+                let tab = this.url.split('/');
+                return tab[tab.length-2];
+            }
+        }
+
+        window.customElements.define(Undefined.is, Undefined);
+    </script>
+</dom-module>

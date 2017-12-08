@@ -1,0 +1,85 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bootstrap-implementation.html">
+<link rel="import" href="../components/undefined-type-component.html">
+
+<dom-module id="film-view">
+    <template>
+        <style include="bootstrap-implementation">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+        </style>
+
+        <app-route route="{{route}}" pattern="/:filmId" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+        <iron-ajax auto url="https://swapi.co/api/films/{{routeData.filmId}}" handle-as="json" on-response="handleResponse">
+        </iron-ajax>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Actors</h4>
+                        <p class="card-text">
+                            <div class="list-group">
+                                <template is="dom-repeat" items="{{film.characters}}" as="actor">
+                                    <undefined-type-component url="{{actor}}" type="actor"></undefined-type-component>
+                                </template>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Starships</h4>
+                        <p class="card-text">
+                            <div class="list-group">
+                                <template is="dom-repeat" items="{{film.starships}}" as="starship">
+                                    <undefined-type-component url="{{starship}}" type="starship"></undefined-type-component>
+                                </template>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="card">
+                    <img class="card-img-top" src="http://via.placeholder.com/450x150" alt="Card image cap">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">{{film.title}}</h4>
+                        <p class="card-text">{{film.opening_crawl}}</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </template>
+
+    <script>
+        class filmView extends Polymer.Element {
+            static get is() { return 'film-view'; }
+
+            static get properties() {
+                return {
+                    route: Object,
+                    film: Object
+                };
+            }
+            connectedCallback() {
+                super.connectedCallback();
+            }
+            handleResponse(response) {
+                this.film = response.detail.response;
+            }
+        }
+
+        window.customElements.define(filmView.is, filmView);
+    </script>
+</dom-module>

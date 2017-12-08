@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bootstrap-implementation.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="film-details">
+    <template>
+        <style include="bootstrap-implementation">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+            a,
+            a:visited,
+            a:hover,
+            a:active {
+                color: inherit;
+            }
+        </style>
+        <div class="card text-center bg-dark" style="width: 20rem;">
+            <img class="card-img-top" src="http://via.placeholder.com/200x200" alt="Card image cap">
+            <div class="card-block text-center">
+                <h4 class="card-title text-center">[[film.title]]</h4>
+                <a href="/film/[[filmId]]" class=" text-center btn btn-danger">Know more</a>
+            </div>
+        </div>
+    </template>
+    <script>
+        class FilmDetails extends Polymer.Element {
+            static get is() { return 'film-details'; }
+
+            static get properties() {
+                return {
+                    film: Object,
+                    id: Number
+                };
+            }
+            connectedCallback() {
+                super.connectedCallback();
+                this.filmId = this.getId();
+            }
+            getId () {
+                let tab = this.film.url.split('/');
+                return tab[tab.length-2];
+            }
+        }
+
+        window.customElements.define(FilmDetails.is, FilmDetails);
+    </script>
+</dom-module>
